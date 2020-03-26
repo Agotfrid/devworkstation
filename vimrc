@@ -92,7 +92,7 @@ Plug 'Raimondi/delimitMate'
 Plug 'majutsushi/tagbar'
 "" Go Lang Bundle
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-
+Plug 'tenfyzhong/golint-fixer.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'avelino/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
@@ -446,6 +446,36 @@ set autoread
 "*****************************************************************************
 "" Mappings
 "*****************************************************************************
+"" Copy Path
+" copy current file name (relative/absolute) to system clipboard
+if has("mac") || has("gui_macvim") || has("gui_mac")
+  " relative path  (src/foo.txt)
+  nnoremap <leader>cr :let @*=expand("%")<CR>
+
+  " absolute path  (/something/src/foo.txt)
+  nnoremap <leader>cA :let @*=expand("%:p")<CR>
+
+  " filename       (foo.txt)
+  nnoremap <leader>cf :let @*=expand("%:t")<CR>
+
+  " directory name (/something/src)
+  nnoremap <leader>cd :let @*=expand("%:p:h")<CR>
+endif
+
+" copy current file name (relative/absolute) to system clipboard (Linux version)
+if has("gui_gtk") || has("gui_gtk2") || has("gui_gnome") || has("unix")
+  " relative path (src/foo.txt)
+  nnoremap <leader>cf :let @+=expand("%")<CR>
+
+  " absolute path (/something/src/foo.txt)
+  nnoremap <leader>cF :let @+=expand("%:p")<CR>
+
+  " filename (foo.txt)
+  nnoremap <leader>ct :let @+=expand("%:t")<CR>
+
+  " directory name (/something/src)
+  nnoremap <leader>ch :let @+=expand("%:p:h")<CR>
+endif
 
 "" Split
 noremap <Leader>h :<C-u>split<CR>
@@ -560,7 +590,7 @@ endif
 let t:NERDTreeBufName = get(t:, '', "default")
 
 " close buffer and nerdtree if it is open
-noremap <expr> <leader>c (bufwinnr(t:NERDTreeBufName) == 1 && bufname("") != "NERD_tree_1" && bufname("") != "NERD_tree_2"  ? ":NERDTreeClose\| bd!<CR>" : ":bd!<CR>" )
+noremap <expr> <leader>q (bufwinnr(t:NERDTreeBufName) == 1 && bufname("") != "NERD_tree_1" && bufname("") != "NERD_tree_2"  ? ":NERDTreeClose\| bd!<CR>" : ":bd!<CR>" )
 " noremap <leader>c if bufwinnr("NERD_tree_2") == 1 && !bufname("") == "NERD_tree_2" :bp\| bd!#<CR> elseif :bd!<CR> endif
 " noremap <leader>c :bd!<CR>
 
@@ -599,6 +629,11 @@ function! s:build_go_files()
         call go#cmd#Build(0)
     endif
 endfunction
+
+" GoLintFixer
+" nmap <leader>lf  :GoLintFix
+" let g:golint_fixer_use_default_mapping = 1
+" let g:golint_fixer_use_go_rename = 1
 
 let g:go_list_type = "quickfix"
 let g:go_fmt_command = "goimports"
@@ -643,7 +678,7 @@ augroup go
     au FileType go nmap <Leader>dv <Plug>(go-doc-vertical)
     au FileType go nmap <Leader>db <Plug>(go-doc-browser)
 
-    au FileType go nmap <leader>r  <Plug>(go-run)
+    au FileType go nmap <leader>R  <Plug>(go-run)
     " au FileType go nmap <leader>t  <Plug>(go-test)
     au FileType go nmap <Leader>gt <Plug>(go-coverage-toggle)
     au FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
@@ -818,7 +853,7 @@ let g:ale_fixers = {
 " In ~/.vim/vimrc, or somewhere similar.
 let g:ale_linters = {
             \   'javascript': ['eslint'],
-            \ 'go': ['gopls'],
+            \ 'go':  ['bingo', 'gobuild', 'gofmt', 'golint', 'gometalinter', 'gopls', 'gosimple', 'gotype', 'govet', 'golangserver', 'staticcheck'],
             \}
 
 " let g:ale_linters = {'go': ['gometalinter', 'gofmt']}
@@ -872,7 +907,7 @@ set updatetime=800
 " let g:polyglot_disabled = ['go']
 
 
-nnoremap <leader>ca :w <bar> %bd <bar> e# <bar> bd# <CR>
+nnoremap <leader>qa :w <bar> %bd <bar> e# <bar> bd# <CR>
 
 "hilight golang present slides
 autocmd BufRead,BufNewFile *.slide set filetype=slide
@@ -938,7 +973,7 @@ autocmd FileType php nnoremap gf :call phpactor#FindReferences()<CR>
 autocmd FileType php nmap <Leader>tt :call phpactor#Transform()<CR>
 
 " Generate a new class (replacing the current file)
-autocmd FileType php nmap <Leader>cc :call phpactor#ClassNew()<CR>
+autocmd FileType php nmap <Leader>cN :call phpactor#ClassNew()<CR>
 
 " Extract expression (normal mode)
 autocmd FileType php nmap <silent><Leader>ee :call phpactor#ExtractExpression(v:false)<CR>
@@ -958,7 +993,7 @@ nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<CR>
 " nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
 nnoremap <leader>fx :call PhpCsFixerFixFile()<CR>
 " Running test for PHP and Golang
-nnoremap <leader>t :TestNearest<CR>
+nnoremap <leader>t :TestNearest -v<CR>
 nmap <silent> t<C-f> :TestFile<CR>
 " nmap <silent> t<C-s> :TestSuite<CR>
 " nmap <silent> t<C-l> :TestLast<CR>
