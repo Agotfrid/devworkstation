@@ -1,10 +1,15 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 alias csfix='php -n vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix -v'
-alias kt='kubectl --kubeconfig ~/.kube/test_cluster_kubeconfig -n t '
 alias nv='nvim'
-alias nvrc='nvim ~/.vimrc'
-alias srcnv='source ~/.vimrc'
+alias kctx="kubectx"
+alias kns="kubens"
+alias vimrc='nvim ~/.vimrc'
+alias srcvim='source ~/.vimrc'
+alias zshrc='nvim ~/.zshrc'
+alias srczsh='source ~/.zshrc'
+export KUBECONFIG=~/.kube/config:~/.kube/test_cluster_kubeconfig:~/.kube/cashier-ci-cluster-kubeconfig:~/.kube/staging_cluster_kubeconfig
+# export KUBECONFIG=~/.kube/config:~/.kube/s_cluster_kubeconfig:~/.kube/t_cluster_kubeconfig
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/alexander.gotfrid/.oh-my-zsh"
 export CHECKOUT_HOSTNAME=cashier-alexander.bold.ninja
@@ -112,7 +117,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source /Users/alexander.gotfrid/.oh-my-zsh/plugins/kube-ps1
-PROMPT='$(kube_ps1)'$PROMPT
+# PROMPT='$(kube_ps1)'$PROMPT
 
 eval "$(direnv hook zsh)"
 export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOPATH/bin
