@@ -239,8 +239,63 @@ function install_mandatories()
 	$APTGETCMD -y install wget
 	$APTGETCMD -y install ssh
 	$APTGETCMD -y install samba smbfs
+	$APTGETCMD -y install curl
+	$APTGETCMD -y install zsh
+	$APTGETCMD -y install vim
+	$APTGETCMD -y install neovim
+	$APTGETCMD -y install tmux
+	$APTGETCMD -y install fonts-powerline
+	$APTGETCMD -y install powerline
+
 }
 
+#***********************************************************************************
+#	DEVENV ESSENTIALS
+#***********************************************************************************
+function install_devenv()
+{
+    #TODO: create one function to install the whole deve env
+	$APTGETCMD -y install firefox
+	$APTGETCMD -y install wget
+	$APTGETCMD -y install ssh
+	$APTGETCMD -y install curl
+	$APTGETCMD -y install zsh
+	$APTGETCMD -y install vim
+	$APTGETCMD -y install neovim
+	$APTGETCMD -y install tmux
+	$APTGETCMD -y install fonts-powerline
+	$APTGETCMD -y install powerline
+	$APTGETCMD -y install python-dev python3-dev
+	$APTGETCMD -y install git git-gui gitk
+	$APTGETCMD -y install mysql-server mysql-client mysql-admin
+	$APTGETCMD -y install apache2
+	$APTGETCMD -y install phpmyadmin
+    $APTGETCMD -y install curl openssh-server ca-certificates postfix
+    $APTGETCMD -y install apt-transport-https
+    $APTGETCMD -y apt-get install fuse libfuse2 git python3-pip ack-grep
+	$APTGETCMD -y install htop
+	$APTGETCMD -y install kubectl
+	$APTGETCMD -y install docker.io
+	$APTGETCMD -y install virtualbox-ext-pack
+	$APTGETCMD -y install golang
+	$APTGETCMD -y install npm
+    $APTGETCMD -y install --no-install-recommends yarn
+    $APTGETCMD -y install gnome-tweak-tool
+    $APTGETCMD -y install direnv
+
+}
+#***********************************************************************************
+#	PHP
+#***********************************************************************************
+function install_python()
+{
+	for i in $PYTH_PKG; do
+		case $i in
+		"python")
+			$APTGETCMD -y install python-dev python3-dev;;
+		esac
+	done
+}
 #***********************************************************************************
 #	SOURCE CONTROL MANAGERS
 #***********************************************************************************
@@ -345,6 +400,8 @@ function install_dbms()
 		case $i in
 		"mysql")
 			$APTGETCMD -y install mysql-server mysql-client mysql-admin;;
+		"apache")
+			$APTGETCMD -y install apache2;;
 		"postgresql")
 			$APTGETCMD -y install postgresql postgresql-client pgadmin3;;
 		"sqlite3")
@@ -389,6 +446,20 @@ function install_cppenv()
 	#test...
 }
 
+#***********************************************************************************
+#	PHP
+#***********************************************************************************
+function install_phpenv()
+{
+	for i in $PHP_PKG; do
+		case $i in
+
+		"php")
+			$APTGETCMD -y install php7;;
+
+		esac
+	done
+}
 #***********************************************************************************
 #	RUBY
 #***********************************************************************************
