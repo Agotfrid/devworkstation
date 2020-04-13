@@ -1,24 +1,30 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-alias csfix='php -n vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix -v'
-alias nv='nvim'
-alias kctx="kubectx"
-alias kns="kubens"
-alias vimrc='nvim ~/.vimrc'
-alias srcvim='source ~/.vimrc'
-alias zshrc='nvim ~/.zshrc'
-alias srczsh='source ~/.zshrc'
-export KUBECONFIG=~/.kube/config:~/.kube/test_cluster_kubeconfig:~/.kube/cashier-ci-cluster-kubeconfig:~/.kube/staging_cluster_kubeconfig
-# export KUBECONFIG=~/.kube/config:~/.kube/s_cluster_kubeconfig:~/.kube/t_cluster_kubeconfig
+
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/alexander.gotfrid/.oh-my-zsh"
-export CHECKOUT_HOSTNAME=cashier-alexander.bold.ninja
+export ZSH=$HOME/.oh-my-zsh
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+# ZSH_THEME="agnoster"
+# ZSH_THEME="bullet-train"
+alias csfix='php -n vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix -v'
+alias nv="nvim"
+alias vimrc="nvim ~/.vimrc"
+alias nvrc="nvim ~/.config/nvim/init.vim"
+alias zshrc="nvim ~/.zshrc"
+alias srczsh="source ~/.zshrc"
+alias srcvim="source ~/.vimrc"
+alias kctx="kubectx"
+alias kns="kubens"
+
 ZSH_THEME="robbyrussell"
 
+export KUBECONFIG=~/.kube/config:~/.kube/test_cluster_kubeconfig:~/.kube/cashier-ci-cluster-kubeconfig:~/.kube/staging_cluster_kubeconfig
+# ZSH_THEME="powerlevel9k/powerlevel9k"
+# POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(user dir vcs)
+# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
@@ -83,15 +89,14 @@ plugins=(
     git-flow
     kubectl
     zsh-autosuggestions
-    fly
+    # fly
     kube-ps1
 )
-
 eval "$(fasd --init auto)"
-
 source $ZSH/oh-my-zsh.sh
-
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=4'
 # User configuration
+
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -116,7 +121,9 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source /Users/alexander.gotfrid/.oh-my-zsh/plugins/kube-ps1
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+source ~/.oh-my-zsh/plugins/kube-ps1
 # PROMPT='$(kube_ps1)'$PROMPT
 
 eval "$(direnv hook zsh)"
