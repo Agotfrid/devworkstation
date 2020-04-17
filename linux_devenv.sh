@@ -793,6 +793,9 @@ esac
 update_packages
 install_mandatories
 
+#Install starting dev environment
+install_devenv
+
 #Process user choices
 install_scm
 install_dbms
