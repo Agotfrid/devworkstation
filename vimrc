@@ -6,6 +6,7 @@ imap jk <Esc>
 nnoremap Y y$
 nnoremap <Tab> :bn<CR>
 nnoremap <S-Tab> :bN<CR>
+nnoremap <C-Space> <C-W>w
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -107,9 +108,23 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 
 "Language Server Protocol (LSP) support for vim and neovim.
 Plug 'autozimu/LanguageClient-neovim', {
-            \ 'branch': 'next',
-            \ 'do': 'bash install.sh',
-            \ }
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+call plug#end()
+
+let g:LanguageClient_autoStop = 0
+let g:LanguageClient_serverCommands = {
+    \ 'ruby': ['tcp://localhost:7658']
+    \ }
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+autocmd FileType ruby setlocal omnifunc=LanguageClient#complete
 
 " (Optional) Multi-entry selection UI.
 Plug 'junegunn/fzf'
@@ -187,10 +202,24 @@ Plug 'arnaud-lb/vim-php-namespace'
 
 " ruby
 Plug 'tpope/vim-rails'
+Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-rake'
 Plug 'tpope/vim-projectionist'
 Plug 'thoughtbot/vim-rspec'
 Plug 'ecomba/vim-ruby-refactoring'
+" neocomplete Plugin
+Plug 'Shougo/neocomplete.vim'
+
+" This language client actually makes use of a binary, hence the `install.sh`.
+" " We also need the `next` branch in order to specify
+" " a language server's TCP port at the time of writing
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+
+
 
 
 Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
@@ -710,6 +739,10 @@ augroup END
 
 
 " ruby
+
+autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
+autocmd FileType eruby setlocal expandtab shiftwidth=2 tabstop=2
+
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
@@ -768,29 +801,31 @@ endif
 "" Convenience variables
 "*****************************************************************************
 
+set guifont=DejaVu\ Sans:s12
 "vim-airline
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
-if !exists('g:airline_powerline_fonts')
+" if !exists('g:airline_powerline_fonts')
+"     let g:airline#extensions#tabline#left_sep = ' '
+"     let g:airline#extensions#tabline#left_alt_sep = '|'
+"     let g:airline_left_sep          = '▶'
+"     let g:airline_left_alt_sep      = '»'
+"     let g:airline_right_sep         = '◀'
+"     let g:airline_right_alt_sep     = '«'
+"     let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
+"     let g:airline#extensions#readonly#symbol   = '⊘'
+"     let g:airline#extensions#linecolumn#prefix = '¶'
+"     let g:airline#extensions#paste#symbol      = 'ρ'
+"     let g:airline_symbols.linenr    = '␊'
+"     let g:airline_symbols.branch    = '⎇'
+"     let g:airline_symbols.paste     = 'ρ'
+"     let g:airline_symbols.paste     = 'Þ'
+"     let g:airline_symbols.paste     = '∥'
+"     let g:airline_symbols.whitespace = 'Ξ'
+" else
     let g:airline#extensions#tabline#left_sep = ' '
-    let g:airline#extensions#tabline#left_alt_sep = '|'
-    let g:airline_left_sep          = '▶'
-    let g:airline_left_alt_sep      = '»'
-    let g:airline_right_sep         = '◀'
-    let g:airline_right_alt_sep     = '«'
-    let g:airline#extensions#branch#prefix     = '⤴' "➔, ➥, ⎇
-    let g:airline#extensions#readonly#symbol   = '⊘'
-    let g:airline#extensions#linecolumn#prefix = '¶'
-    let g:airline#extensions#paste#symbol      = 'ρ'
-    let g:airline_symbols.linenr    = '␊'
-    let g:airline_symbols.branch    = '⎇'
-    let g:airline_symbols.paste     = 'ρ'
-    let g:airline_symbols.paste     = 'Þ'
-    let g:airline_symbols.paste     = '∥'
-    let g:airline_symbols.whitespace = 'Ξ'
-else
     let g:airline#extensions#tabline#left_sep = ''
     let g:airline#extensions#tabline#left_alt_sep = ''
 
@@ -802,7 +837,7 @@ else
     let g:airline_symbols.branch = ''
     let g:airline_symbols.readonly = ''
     let g:airline_symbols.linenr = ''
-endif
+" endif
 
 
 " fzf
@@ -846,16 +881,20 @@ hi Visual ctermbg=100
 
 " In ~/.vim/vimrc, or somewhere similar.
 let g:ale_fixers = {
+            \ 'ruby': ['rubocop'],
             \   '*': ['remove_trailing_lines', 'trim_whitespace'],
             \   'javascript': ['eslint', 'importjs', 'prettier', 'prettier_eslint', 'prettier_standard', 'standard', 'xo'],
             \   'GO': ['gofmt', 'go build'],
             \}
 " In ~/.vim/vimrc, or somewhere similar.
 let g:ale_linters = {
-            \   'javascript': ['eslint'],
+            \ 'ruby': ['rubocop'],
+            \ 'javascript': ['eslint'],
             \ 'go':  ['bingo', 'gobuild', 'gofmt', 'golint', 'gometalinter', 'gopls', 'gosimple', 'gotype', 'govet', 'golangserver', 'staticcheck'],
             \}
 
+let g:ale_enabled = 1
+let g:ale_fix_on_save = 1
 " let g:ale_linters = {'go': ['gometalinter', 'gofmt']}
 
 
