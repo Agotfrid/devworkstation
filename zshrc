@@ -7,9 +7,40 @@ export ZSH=$HOME/.oh-my-zsh
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
 # ZSH_THEME="agnoster"
 # ZSH_THEME="bullet-train"
+alias psalm='composer psalm'
+alias helm214upgrade='helm214 upgrade --namespace cashier-ci-main -f values.yaml gitlab-runner gitlab/gitlab-runner'
+alias phpunit='XDEBUG_MODE=off ./vendor/bin/phpunit -v'
+alias csfix='php -n vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix -v'
+alias nv="nvim"
+alias vimrc="nvim ~/.vimrc"
+alias nvrc="nvim ~/.config/nvim/init.vim"
+alias zshrc="nvim ~/.zshrc"
+alias srczsh="source ~/.zshrc"
+alias srcvim="source ~/.vimrc"
+alias kctx="kubectx"
+alias kns="kubens"
+alias chns="kubectl config set-context --current --namespace"
+alias phpini="/usr/local/etc/php/7.4/php.in"
+alias buildcashier="cd admin && yarn install && yarn build-dev && \
+cd ../checkout-default-theme && yarn install && yarn build && \
+cd ../e2etests && yarn install && \
+cd ../bold-checkout-flows && yarn install && yarn build  && \
+cd ../back-end && composer install --ignore-platform-reqs && \
+cd ../storefront-assets-shopify && yarn install && yarn run build && \
+cd ../checkout-core && yarn install && yarn build && \
+cd ../checkout-core-v2 && yarn install && yarn build && \
+cd ../payment-method-management && yarn install && yarn build && \
+cd ../payment-method-frame && yarn install && yarn build && cd ../"
+alias cpu="top -F -R -o cpu"
+alias kunset="kubectl config unset"
+alias krc="kubectl config rename-context"
+alias chrome="open -a 'Google Chrome'"
+
+ZSH_THEME="robbyrussell"
+
+export KUBECONFIG=~/.kube/config:~/.kube/test_cluster_kubeconfig:~/.kube/cashier-ci-cluster-kubeconfig:~/.kube/staging_cluster_kubeconfig
 # ZSH_THEME="powerlevel9k/powerlevel9k"
 # POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(user dir vcs)
 # POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
@@ -79,12 +110,39 @@ plugins=(
     zsh-autosuggestions
     kube-ps1
 )
+eval "$(fasd --init auto)"
+source $ZSH/oh-my-zsh.sh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=4'
 # User configuration
 
 
-export KUBECONFIG=~/.kube/config:~/.kube/test_cluster_kubeconfig:~/.kube/cashier-ci-cluster-kubeconfig:~/.kube/staging_cluster_kubeconfig
+# export MANPATH="/usr/local/man:$MANPATH"
 
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+#
+  # elif [ "$node_version" != "$(nvm version default)" ]; then
 export FORMAT="\nID\t{{.ID}}\nIMAGE\t{{.Image}}\nCOMMAND\t{{.Command}}\nCREATED\t{{.RunningFor}}\nSTATUS\t{{.Status}}\nPORTS\t{{.Ports}}\nNAMES\t{{.Names}}\n"
 
 source ~/.oh-my-zsh/plugins/kube-ps1
@@ -139,60 +197,7 @@ if [ -f '/Users/alexander.gotfrid/google-cloud-sdk/path.zsh.inc' ]; then . '/Use
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/alexander.gotfrid/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/alexander.gotfrid/google-cloud-sdk/completion.zsh.inc'; fi
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias psalm='composer psalm'
-alias helm214upgrade='helm214 upgrade --namespace cashier-ci-main -f values.yaml gitlab-runner gitlab/gitlab-runner'
-alias phpunit='XDEBUG_MODE=off ./vendor/bin/phpunit -v'
-alias csfix='php -n vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix -v'
-alias nv="nvim"
-alias vimrc="nvim ~/.vimrc"
-alias nvrc="nvim ~/.config/nvim/init.vim"
-alias zshrc="nvim ~/.zshrc"
-alias srczsh="source ~/.zshrc"
-alias srcvim="source ~/.vimrc"
-alias kctx="kubectx"
-alias kns="kubens"
-alias chns="kubectl config set-context --current --namespace"
-alias phpini="/usr/local/etc/php/7.4/php.in"
-alias buildcashier="cd admin && yarn install && yarn build-dev && \
-cd ../checkout-default-theme && yarn install && yarn build && \
-cd ../e2etests && yarn install && \
-cd ../bold-checkout-flows && yarn install && yarn build  && \
-cd ../back-end && composer install --ignore-platform-reqs && \
-cd ../storefront-assets-shopify && yarn install && yarn run build && \
-cd ../checkout-core && yarn install && yarn build && \
-cd ../checkout-core-v2 && yarn install && yarn build && \
-cd ../payment-method-management && yarn install && yarn build && \
-cd ../payment-method-frame && yarn install && yarn build && cd ../"
-alias cpu="top -F -R -o cpu"
-alias kunset="kubectl config unset"
-alias krc="kubectl config rename-context"
-alias chrome="open -a 'Google Chrome'"
-
 eval "$(direnv hook zsh)"
-eval "$(fasd --init auto)"
-source $ZSH/oh-my-zsh.sh
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
