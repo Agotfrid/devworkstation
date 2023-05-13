@@ -15,7 +15,7 @@ detect_os() {
 # Copy configuration files
 copy_config_files() {
   cp zshrc ~/.zshrc
-  cp tmux.conf ~/.tmux.conf
+  cp tmux-linux.conf ~/.tmux.conf
   cp vimrc ~/.vimrc
   mkdir -p ~/.config/nvim
   cp init.vim ~/.config/nvim/init.vim
@@ -23,9 +23,8 @@ copy_config_files() {
 
 # Source configuration files
 source_config_files() {
-  source ~/.zshrc
-  tmux source-file ~/.tmux.conf
-  vim +source\ ~/.vimrc +qall
+  tmux source ~/.tmux.conf
+  source ~/.vimrc
 }
 
 # Install packages based on OS type
@@ -34,23 +33,21 @@ install_packages() {
 
   if [ "$os_type" == "Linux" ]; then
     sudo apt update
-    sudo apt install -y tmux git golang zsh wget curl neovim vim jq openssl python3 ruby php telnet tree yarn xclip
-    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    sudo apt install -y tmux git golang zsh wget curl neovim vim jq openssl python3 ruby php telnet tree yarn xclip cmake silversearcher-ag
     sudo apt update
-    sudo apt install -y google-cloud-sdk
-    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-    chmod 700 get_helm.sh
-    ./get_helm.sh
     sudo apt install -y fasd
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo dpkg -i google-chrome-stable_current_amd64.deb
+    if ! which google-chrome > /dev/null; then
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo dpkg -i google-chrome-stable_current_amd64.deb
+    else
+        echo "Google Chrome is already installed."
+    fi
+    go install github.com/mfuentesg/ksd@latest
     sudo apt --fix-broken install
     sudo snap install kustomize --classic
     sudo snap install dep --classic
     sudo snap install fzf --classic
     sudo snap install k9s --classic
-    sudo snap install ksd --classic
     sudo snap install kubectx --classic
     sudo snap install kubectl --classic
     sudo snap install stern --classic
@@ -60,21 +57,45 @@ install_packages() {
     sudo snap install code --classic
   elif [ "$os_type" == "MacOS" ]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    brew install tmux git go zsh wget curl neovim vim helm jq openssl python3 ruby php telnet tree yarn
-    brew install kustomize dep fzf grep k9s ksd kubectx kubernetes-cli stern tfenv ytt
-    brew tap google-cloud-sdk
-    brew install google-cloud-sdk
+    brew install tmux git go zsh wget curl neovim vim helm jq openssl python3 ruby php telnet tree yarn the_silver_searcher cmake
+    brew install kustomize dep fzf grep k9s mfuentesg/tap/ksd kubectx kubernetes-cli stern tfenv ytt
     brew install --cask google-chrome
     brew install --cask docker
     brew install --cask visual-studio-code
     brew install --cask sequel-ace
   fi
+
+  #set zsh as default shell
+  sudo chsh -s $(which zsh)
+
+  #tmux tpm install if needed
+  if [ ! -f "$HOME/.tmux/plugins/tpm/tpm" ]; then
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+  fi
+
+  #Configure vim
+  # Install VimPlug
+  if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
+    curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  fi
+
+  # Install Vundle
+  if [ ! -f "$HOME/.vim/bundle/Vundle.vim" ]; then
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  fi
 }
 
 install_oh_my_zsh() {
-  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-  git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
-  git clone https://github.com/jonmosco/kube-ps1.git $ZSH_CUSTOM/plugins/kube-ps1
+  if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    git clone https://github.com/jonmosco/kube-ps1.git $ZSH_CUSTOM/plugins/kube-ps1
+    source ~/.zshrc
+  else
+    echo "Oh My Zsh is already installed."
+  fi
 }
 
 install_direnv() {
@@ -91,8 +112,8 @@ install_direnv() {
 
 main() {
   local os_type=$(detect_os)
-  install_packages "$os_type"
   install_oh_my_zsh
+  install_packages "$os_type"
   install_direnv "$os_type"
   copy_config_files
   source_config_files
