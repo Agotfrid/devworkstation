@@ -5,7 +5,7 @@ export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOPATH/bin
 export GOPRIVATE="git-lab.boldapps.net"
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=4'
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
 # Aliases
 alias nv="nvim"

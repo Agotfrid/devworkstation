@@ -2,39 +2,12 @@ set clipboard=unnamed
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-imap jk <Esc>
+imap jk <CR>
 nnoremap Y y$
 nnoremap <Tab> :bn<CR>
 nnoremap <S-Tab> :bN<CR>
 nnoremap <C-Space> <C-W>w
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-Bundle 'stephpy/vim-php-cs-fixer'
-
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-"=============================================================================
 let g:tmux_navigator_no_mappings = 1
 
 nnoremap <silent> {Left-Mapping} :TmuxNavigateLeft<cr>
@@ -97,7 +70,7 @@ Plug 'tenfyzhong/golint-fixer.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'avelino/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
-Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe', { 'do': 'python3 install.py' }
 Plug 'tmux-plugins/vim-tmux'
 Plug 'vim-syntastic/syntastic'
 Plug 'dense-analysis/ale'
@@ -315,29 +288,29 @@ set t_Co=256
 set guioptions=egmrti
 set gfn=Monospace\ 10
 
-if has("gui_running")
-    if has("gui_mac") || has("gui_macvim")
-        set guifont=Menlo:h12
-        set transparency=7
-    endif
-else
-    let g:CSApprox_loaded = 1
+" if has("gui_running")
+"     if has("gui_mac") || has("gui_macvim")
+"         set guifont=Menlo:h12
+"         set transparency=7
+"     endif
+" else
+"     let g:CSApprox_loaded = 1
 
-    " IndentLine
-    let g:indentLine_enabled = 1
-    let g:indentLine_concealcursor = 0
-    let g:indentLine_char = '┆'
-    let g:indentLine_faster = 1
+"     " IndentLine
+"     let g:indentLine_enabled = 1
+"     let g:indentLine_concealcursor = 0
+"     let g:indentLine_char = '┆'
+"     let g:indentLine_faster = 1
 
-    if $COLORTERM == 'gnome-terminal'
-        set term=gnome-256color
-    else
-        if $TERM == 'xterm'
-            set term=xterm-256color
-        endif
-    endif
+"     if $COLORTERM == 'gnome-terminal'
+"         set term=gnome-256color
+"     else
+"         if $TERM == 'xterm'
+"             set term=xterm-256color
+"         endif
+"     endif
 
-endif
+" endif
 
 
 if &term =~ '256color'

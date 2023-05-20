@@ -24,7 +24,6 @@ copy_config_files() {
 # Source configuration files
 source_config_files() {
   tmux source ~/.tmux.conf
-  source ~/.vimrc
 }
 
 # Install packages based on OS type
@@ -36,12 +35,6 @@ install_packages() {
     sudo apt install -y tmux git golang zsh wget curl neovim vim jq openssl python3 ruby php telnet tree yarn xclip cmake silversearcher-ag
     sudo apt update
     sudo apt install -y fasd
-    if ! which google-chrome > /dev/null; then
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo dpkg -i google-chrome-stable_current_amd64.deb
-    else
-        echo "Google Chrome is already installed."
-    fi
     go install github.com/mfuentesg/ksd@latest
     sudo apt --fix-broken install
     sudo snap install kustomize --classic
@@ -56,10 +49,11 @@ install_packages() {
     sudo snap install docker
     sudo snap install code --classic
   elif [ "$os_type" == "MacOS" ]; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    brew install tmux git go zsh wget curl neovim vim helm jq openssl python3 ruby php telnet tree yarn the_silver_searcher cmake
+      if ! command -v brew &> /dev/null; then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      fi
+    brew install tmux git go zsh wget curl neovim vim helm jq openssl python3 ruby php telnet tree yarn the_silver_searcher cmake fasd
     brew install kustomize dep fzf grep k9s mfuentesg/tap/ksd kubectx kubernetes-cli stern tfenv ytt
-    brew install --cask google-chrome
     brew install --cask docker
     brew install --cask visual-studio-code
     brew install --cask sequel-ace
@@ -80,15 +74,15 @@ install_packages() {
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   fi
 
-  # Install Vundle
-  if [ ! -f "$HOME/.vim/bundle/Vundle.vim" ]; then
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-  fi
+  #Run Vim specific commands
+  vim +'PlugInstall --sync' +qa
+  vim +'GoInstallBinaries' +qa
+
 }
 
 install_oh_my_zsh() {
   if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    yes | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
     git clone https://github.com/jonmosco/kube-ps1.git $ZSH_CUSTOM/plugins/kube-ps1
