@@ -38,7 +38,6 @@ install_packages() {
     go install github.com/mfuentesg/ksd@latest
     sudo apt --fix-broken install
     sudo snap install kustomize --classic
-    sudo snap install dep --classic
     sudo snap install fzf --classic
     sudo snap install k9s --classic
     sudo snap install kubectx --classic
@@ -52,8 +51,8 @@ install_packages() {
       if ! command -v brew &> /dev/null; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       fi
-    brew install tmux git go zsh wget curl neovim vim helm jq openssl python3 ruby php telnet tree yarn the_silver_searcher cmake fasd
-    brew install kustomize dep fzf grep k9s mfuentesg/tap/ksd kubectx kubernetes-cli stern tfenv ytt
+    brew install tmux git go zsh wget curl neovim vim helm jq openssl python3.8 python ruby php telnet tree yarn the_silver_searcher cmake \
+    kustomize fzf grep k9s mfuentesg/tap/ksd kubectx kubernetes-cli stern tfenv ytt
     brew install --cask docker
     brew install --cask visual-studio-code
     brew install --cask sequel-ace
