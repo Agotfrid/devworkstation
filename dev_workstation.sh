@@ -52,7 +52,7 @@ install_packages() {
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       fi
     brew install tmux git z go zsh wget curl neovim vim helm jq openssl python3.8 python ruby php telnet tree yarn the_silver_searcher cmake nvm\
-    kustomize fzf grep k9s mfuentesg/tap/ksd kubectx kubernetes-cli stern tfenv ytt
+    kustomize fzf grep k9s mfuentesg/tap/ksd kubectx kubernetes-cli stern tfenv ytt npm
     brew install --cask docker
     brew install --cask visual-studio-code
     brew install --cask sequel-ace

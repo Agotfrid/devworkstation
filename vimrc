@@ -8,6 +8,12 @@ nnoremap <Tab> :bn<CR>
 nnoremap <S-Tab> :bN<CR>
 nnoremap <C-Space> <C-W>w
 
+" Persistent undo
+set undofile
+set undodir=$HOME/.vim/undo
+set undolevels=1000
+set undoreload=10000
+
 let g:tmux_navigator_no_mappings = 1
 
 nnoremap <silent> {Left-Mapping} :TmuxNavigateLeft<cr>
@@ -15,11 +21,6 @@ nnoremap <silent> {Down-Mapping} :TmuxNavigateDown<cr>
 nnoremap <silent> {Up-Mapping} :TmuxNavigateUp<cr>
 nnoremap <silent> {Right-Mapping} :TmuxNavigateRight<cr>
 nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
-
-" {{{ sdfasdfjk
-" hellow world
-" "}}}
-" vim-bootstrap 5268b45
 
 "*****************************************************************************
 "" Vim-PLug core
@@ -52,9 +53,10 @@ call plug#begin(expand('~/.vim/plugged'))
 "*****************************************************************************
 "" Plug install packages
 "*****************************************************************************
-Plug 'scrooloose/nerdtree'
-" Plug 'jistr/vim-nerdtree-tabs'
+Plug 'christianrondeau/vim-base64'
+Plug 'preservim/nerdtree'
 Plug 'tpope/vim-commentary'
+Plug 'pearofducks/ansible-vim'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -71,6 +73,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'avelino/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
 Plug 'Valloric/YouCompleteMe', { 'do': 'python3 install.py' }
+" Plug 'neoclide/coc.nvim', {'branch': 'release'} Disabled in favor of YouCompleteMe
 Plug 'tmux-plugins/vim-tmux'
 Plug 'vim-syntastic/syntastic'
 Plug 'dense-analysis/ale'
@@ -166,6 +169,7 @@ Plug 'mattn/emmet-vim'
 " javascript
 "" Javascript Bundle
 Plug 'jelera/vim-javascript-syntax'
+Plug 'pangloss/vim-javascript'
 
 
 " php
