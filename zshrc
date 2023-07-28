@@ -1,10 +1,13 @@
 # Export
 export ZSH=$HOME/.oh-my-zsh
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
-export CLOUDSDK_PYTHON=/usr/local/bin/python3.11
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOPATH/bin
+export GOPRIVATE="git-lab.boldapps.net"
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+
+export CLOUDSDK_PYTHON=/usr/local/bin/python3.11
 export GOPRIVATE="git-lab.boldapps.net"
 export NVM_DIR="$HOME/.nvm"
   [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
@@ -21,6 +24,7 @@ alias kctx="kubectx"
 alias kns="kubens"
 alias cpu="top -F -R -o cpu"
 alias chrome="open -a 'Google Chrome'"
+alias gce-hosts="source ~/gce-regen-hosts.sh"
 
 # Theme and plugins
 ZSH_THEME="robbyrussell"
@@ -44,3 +48,11 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
 
 . /usr/local/etc/profile.d/z.sh
+
+eval "$(direnv hook zsh)"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
